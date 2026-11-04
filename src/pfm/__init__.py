@@ -1,4 +1,4 @@
-"""Pottery Fragment Matching (pfm): appearance + fracture-edge geometry."""
+"""SherdMatch core library (pfm = pottery fragment matching): appearance + fracture-edge geometry."""
 from pathlib import Path
 
 # On Windows torch's c10.dll fails to initialise if cv2 is loaded first.

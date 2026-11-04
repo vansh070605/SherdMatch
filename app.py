@@ -55,9 +55,10 @@ def run_upload(path, method):
 
 HEAD = ["rank", "sherd", "match score", "DINOv2 cos", "colour sim", "edge contact (px)", "overlap", "true refit?"]
 
-with gr.Blocks(title="Pottery Fragment Matching") as demo:
+with gr.Blocks(title="SherdMatch") as demo:
     gr.Markdown(
-        "# AI-Based Archaeological Pottery Fragment Matching\n"
+        "# SherdMatch\n"
+        "### AI-Based Archaeological Pottery Fragment Matching\n"
         "Pick a sherd (or upload one). The system ranks the most likely joining fragments from the "
         "Daxinzhuang gold-standard collection and previews the best physical fit. "
         "It *recommends* candidates for an expert to check; it does not confirm joins.\n\n"

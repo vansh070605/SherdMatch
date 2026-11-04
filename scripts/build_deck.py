@@ -225,9 +225,11 @@ def pts(comp, met):
 
 # ------------------------------------------------------------------ slides
 # 1 title
-s = new_slide("Introduce yourself and the project. Review 1 was the plan; Review 2 shows what was built, the results, "
-              "and an honest answer to the research question.")
-text(s, 0.6, 0.7, 6.6, 2.8, ["AI-Based Archaeological", "Pottery Fragment", "**Matching**"], size=40, bold=True, spacing=0)
+s = new_slide("Introduce yourself and the project. SherdMatch is the name of the system built for the AI-based pottery "
+              "fragment matching topic presented at Review 1. Review 1 was the plan; Review 2 shows what was built, "
+              "the results, and an honest answer to the research question.")
+text(s, 0.6, 0.8, 6.8, 1.2, "Sherd**Match**", size=66, bold=True, spacing=0)
+text(s, 0.6, 2.15, 6.6, 1.4, ["AI-Based Archaeological", "Pottery Fragment Matching"], size=28, bold=True, spacing=0)
 text(s, 0.6, 3.75, 6.2, 0.8, "From a plan to a working, evaluated system: appearance + fracture-edge geometry "
                              "on the Daxinzhuang-18K benchmark", size=16, color=MUTED)
 text(s, 0.6, 4.75, 6, 0.4, "PRT LLT · 21CSE451T", size=14, color=ACCENT, bold=True)
@@ -519,7 +521,7 @@ bullets(s, 8.3, 2.2, 4.4, 3.4, [
     "Switch: proposed vs image-only",
 ], size=15)
 panel(s, 8.3, 5.75, 4.4, 1.2, line=ACCENT)
-text(s, 8.5, 5.88, 4.0, 1.0, ["python app.py", "github.com/vansh070605/pottery-fragment-matching"], size=13,
+text(s, 8.5, 5.88, 4.0, 1.0, ["python app.py", "github.com/vansh070605/SherdMatch"], size=13,
      color=TEXT, spacing=4)
 
 # 16 inference
@@ -573,7 +575,7 @@ refs = [
 ]
 text(s, 0.6, 2.1, 8.2, 4.8, refs, size=12, color=TEXT, spacing=7)
 panel(s, 9.2, 2.1, 3.55, 2.2, line=ACCENT)
-text(s, 9.4, 2.3, 3.2, 1.9, ["**Code, results, report**", "github.com/vansh070605/", "pottery-fragment-matching"],
+text(s, 9.4, 2.3, 3.2, 1.9, ["**Code, results, report**", "github.com/vansh070605/", "SherdMatch"],
      size=14, spacing=4)
 text(s, 9.2, 4.7, 3.6, 0.8, "Thank you", size=34, bold=True)
 text(s, 9.2, 5.45, 3.6, 0.5, "Questions?", size=20, color=ACCENT, bold=True)

@@ -1,4 +1,6 @@
-# AI-Based Archaeological Pottery Fragment Matching
+# SherdMatch
+
+**AI-Based Archaeological Pottery Fragment Matching**
 
 **21CSE451T Pattern Recognition Techniques, case study / mini project (Review 2)**
 Vansh Agrawal (RA2311026010120), CINTEL, Sec AC-1. Faculty: Dr Nithyashri J
