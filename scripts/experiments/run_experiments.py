@@ -7,7 +7,7 @@
   E4  geometry on clean synthetic fractures (sim_data_8): pose recovery + pair AUC
   E5  pose accuracy of the geometric matcher on real gold pairs
 
-Usage:  python scripts/run_experiments.py           (uses cache when present)
+Usage:  python scripts/experiments/run_experiments.py           (uses cache when present)
 """
 import itertools
 import json
@@ -17,7 +17,7 @@ import time
 from multiprocessing import Pool
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
 from pfm import OUT  # noqa: E402  (first: loads torch before sklearn/cv2, see pfm/__init__)
 import numpy as np  # noqa: E402

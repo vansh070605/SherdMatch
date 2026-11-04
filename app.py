@@ -1,7 +1,7 @@
 """SherdMatch demo: a multi-page Gradio app.
 
 Pages: Home (the problem) · How it works · Matcher · Results
-Run:  python app.py      (after scripts/run_experiments.py has built the cache)
+Run:  python app.py      (after scripts/experiments/run_experiments.py has built the cache)
 """
 import base64
 import io

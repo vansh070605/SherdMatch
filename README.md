@@ -36,20 +36,24 @@ Main findings (95% paired bootstrap CIs are in `outputs/tables/bootstrap_ci.csv`
 ## Repository layout
 
 ```
-src/pfm/            the library
-  preprocess.py     validate -> mask (alpha / Otsu+GrabCut) -> CLAHE -> contour
-  features.py       colour histogram, LBP texture, ResNet-50 / DINOv2 embeddings
-  geometry.py       curvature-signature edge matching, Kabsch + ICP alignment, contact/overlap check
-  metrics.py        Hit@k, MRR, mAP, CMC, precision/recall/F1
-  matcher.py        query-time ranking + reconstruction preview (used by the demo)
+app.py                    SherdMatch web app (Home · How it works · Matcher · Results)
+assets/motion.js          page animations (scroll reveal, count-up, hero parallax)
+src/pfm/                  the library (pfm = pottery fragment matching)
+  preprocess.py           validate -> mask (alpha / Otsu+GrabCut) -> CLAHE -> contour
+  features.py             colour histogram, LBP texture, ResNet-50 / DINOv2 embeddings
+  geometry.py             curvature-signature edge matching, Kabsch + ICP alignment, contact/overlap check
+  metrics.py              Hit@k, MRR, mAP, CMC, precision/recall/F1
+  matcher.py              query-time ranking + reconstruction preview (used by the app)
+  data.py                 dataset loaders and pose conventions
 scripts/
-  fetch_real_subset.py   pulls the metadata + refit photos out of the 4.7 GB zip with HTTP range requests
-  explore_dataset.py     dataset + metadata exploration figures
-  run_experiments.py     all experiments (E1-E5) -> outputs/results.json
-  make_figures.py        result figures + bootstrap CIs
-app.py              SherdMatch web app (Home · How it works · Matcher · Results)
-outputs/            figures, tables, results.json (data/ and caches are git-ignored)
-docs/               Review 2 report (.docx/.pdf), deck (.pptx/.pdf), Review 1 deck
+  data/                   fetch_real_subset.py: metadata + photos out of the 4.7 GB zip via HTTP range requests
+  experiments/            run_experiments.py (E1-E5), per_fold.py, run_real_photos.py (E6)
+  figures/                explore_dataset.py, make_figures.py, make_method_figures.py
+  docs/                   build_report.py, build_deck.py: generate the Review 2 report and deck
+outputs/                  figures, tables, results.json, trained model
+docs/                     Review 2 report (.docx/.pdf), deck (.pptx/.pdf), Review 1 deck
+templates/                course report template (local only, not committed)
+data/, models/, .pylibs/  dataset, model weights, local libraries (local only, not committed)
 ```
 
 ## Review 2 deliverables
@@ -58,10 +62,10 @@ docs/               Review 2 report (.docx/.pdf), deck (.pptx/.pdf), Review 1 de
 * `docs/Review2_PPT.pptx` (+ PDF): the 17-slide Review 2 deck, with speaker notes
 * `app.py`: the live demo
 
-Both documents are generated from the results by `scripts/build_report.py` and `scripts/build_deck.py`, so
+Both documents are generated from the results by `scripts/docs/build_report.py` and `scripts/docs/build_deck.py`, so
 they always match `outputs/results.json`.
 
-E6 (zero-shot transfer to 799 raw field photos, `scripts/run_real_photos.py`) is implemented but was not run to
+E6 (zero-shot transfer to 799 raw field photos, `scripts/experiments/run_real_photos.py`) is implemented but was not run to
 completion for Review 2; it is listed as future work.
 
 ## Reproduce
@@ -72,13 +76,13 @@ and unzip them there.
 
 ```bash
 pip install -r requirements.txt
-python scripts/explore_dataset.py
-python scripts/run_experiments.py
-python scripts/make_figures.py
-python scripts/make_method_figures.py
-python scripts/per_fold.py
-python scripts/build_report.py   # needs the course template next to it
-python scripts/build_deck.py
+python scripts/figures/explore_dataset.py
+python scripts/experiments/run_experiments.py
+python scripts/figures/make_figures.py
+python scripts/figures/make_method_figures.py
+python scripts/experiments/per_fold.py
+python scripts/docs/build_report.py   # needs the course template in templates/
+python scripts/docs/build_deck.py
 python app.py            # http://127.0.0.1:7860
 ```
 

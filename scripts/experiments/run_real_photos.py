@@ -13,7 +13,7 @@ from types import SimpleNamespace
 from multiprocessing import Pool
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src"))
 
 from pfm import DATA, OUT  # noqa: E402  (first: torch before cv2)
 import numpy as np  # noqa: E402

@@ -14,7 +14,7 @@ from pathlib import Path
 import requests
 
 URL = "https://zenodo.org/records/21553799/files/Daxinzhuang-18K.zip?download=1"
-OUT = Path(__file__).resolve().parent.parent / "data" / "raw" / "Daxinzhuang-18K"
+OUT = Path(__file__).resolve().parents[2] / "data" / "raw" / "Daxinzhuang-18K"
 
 
 class HttpFile(io.RawIOBase):
