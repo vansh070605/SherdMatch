@@ -1,0 +1,47 @@
+{
+ "dino": {
+  "top1_wrong": 100,
+  "top1_wrong_same_vessel": 17,
+  "frac": 0.17,
+  "top5_same_vessel_share": 0.174,
+  "hit5_by_area_tercile": [
+   0.244,
+   0.488,
+   0.476
+  ],
+  "hit5_group_small": 0.364,
+  "hit5_group_large": 0.422,
+  "n_small": 44,
+  "n_large": 64
+ },
+ "app": {
+  "top1_wrong": 92,
+  "top1_wrong_same_vessel": 12,
+  "frac": 0.13,
+  "top5_same_vessel_share": 0.213,
+  "hit5_by_area_tercile": [
+   0.366,
+   0.537,
+   0.667
+  ],
+  "hit5_group_small": 0.477,
+  "hit5_group_large": 0.562,
+  "n_small": 44,
+  "n_large": 64
+ },
+ "prop": {
+  "top1_wrong": 100,
+  "top1_wrong_same_vessel": 11,
+  "frac": 0.11,
+  "top5_same_vessel_share": 0.219,
+  "hit5_by_area_tercile": [
+   0.439,
+   0.512,
+   0.714
+  ],
+  "hit5_group_small": 0.523,
+  "hit5_group_large": 0.625,
+  "n_small": 44,
+  "n_large": 64
+ }
+}

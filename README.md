@@ -47,8 +47,20 @@ scripts/
   make_figures.py        result figures + bootstrap CIs
 app.py              Gradio demo
 outputs/            figures, tables, results.json (data/ and caches are git-ignored)
-docs/               Review 2 report (.docx) and deck (.pptx)
+docs/               Review 2 report (.docx/.pdf), deck (.pptx/.pdf), Review 1 deck
 ```
+
+## Review 2 deliverables
+
+* `docs/Review2_Case_Study_Report.docx` (+ PDF): the case study report, filled into the course template (27 pages)
+* `docs/Review2_PPT.pptx` (+ PDF): the 17-slide Review 2 deck, with speaker notes
+* `app.py`: the live demo
+
+Both documents are generated from the results by `scripts/build_report.py` and `scripts/build_deck.py`, so
+they always match `outputs/results.json`.
+
+E6 (zero-shot transfer to 799 raw field photos, `scripts/run_real_photos.py`) is implemented but was not run to
+completion for Review 2; it is listed as future work.
 
 ## Reproduce
 
@@ -61,6 +73,10 @@ pip install -r requirements.txt
 python scripts/explore_dataset.py
 python scripts/run_experiments.py
 python scripts/make_figures.py
+python scripts/make_method_figures.py
+python scripts/per_fold.py
+python scripts/build_report.py   # needs the course template next to it
+python scripts/build_deck.py
 python app.py            # http://127.0.0.1:7860
 ```
 
