@@ -1,0 +1,13 @@
+data/raw/
+data/processed/
+outputs/cache/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+~$*
+.pylibs/
+models/
+Pattern_Recognition_Case_Study_Report_Template.docx
+PRT Rev 1 PPT.pdf
+.claude/
+outputs/_*

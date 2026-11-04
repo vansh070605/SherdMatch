@@ -1,0 +1,17 @@
+numpy<2
+pandas
+scipy
+scikit-learn
+scikit-image
+opencv-python
+pillow
+matplotlib
+networkx
+openpyxl
+requests
+torch
+timm
+gradio
+python-pptx
+python-docx
+joblib
