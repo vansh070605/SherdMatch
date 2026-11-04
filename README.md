@@ -47,7 +47,7 @@ scripts/
   explore_dataset.py     dataset + metadata exploration figures
   run_experiments.py     all experiments (E1-E5) -> outputs/results.json
   make_figures.py        result figures + bootstrap CIs
-app.py              Gradio demo
+app.py              SherdMatch web app (Home · How it works · Matcher · Results)
 outputs/            figures, tables, results.json (data/ and caches are git-ignored)
 docs/               Review 2 report (.docx/.pdf), deck (.pptx/.pdf), Review 1 deck
 ```

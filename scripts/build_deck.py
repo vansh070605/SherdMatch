@@ -509,20 +509,19 @@ if PH:
          size=13, color=MUTED)
 
 # 15 demo
-s = new_slide("Live demo: pick JDX-103; the expert partner JDX-107 comes first and the fit preview shows the joint. "
-              "Switch to the image-only baseline to show the difference. Upload a raw photo to show segmentation.")
-header(s, "Prototype", "Working demo")
-framed(s, FIG / "demo_gallery_query.jpg", 0.6, 2.1, 7.4, 4.9)
-bullets(s, 8.3, 2.2, 4.4, 3.4, [
-    "Pick a sherd or **upload a photo**",
-    "Top-5 candidates with scores",
-    "**Evidence table**: why each was suggested",
-    "**Fit preview**: first step to digital reconstruction",
-    "Switch: proposed vs image-only",
-], size=15)
-panel(s, 8.3, 5.75, 4.4, 1.2, line=ACCENT)
-text(s, 8.5, 5.88, 4.0, 1.0, ["python app.py", "github.com/vansh070605/SherdMatch"], size=13,
-     color=TEXT, spacing=4)
+s = new_slide("Live demo. Start on Home to frame the problem, then open Matcher: pick JDX-103; its expert partner "
+              "comes first and the fit preview shows the joint. Switch to the image-only baseline: the same partner "
+              "drops to rank 28. Upload a raw photo to show segmentation.")
+header(s, "Prototype", "SherdMatch web app")
+for i, (img, cap) in enumerate([("demo_home.jpg", "HOME: the problem, the approach, the headline results"),
+                                 ("demo_gallery_query.jpg", "MATCHER: click a sherd, get ranked joins and a fit preview")]):
+    x = 0.6 + i * 6.15
+    panel(s, x, 1.95, 5.95, 4.35, line=RGBColor(0x3A, 0x32, 0x2B))
+    picture(s, FIG / img, x + 0.12, 2.07, w=5.71)
+    text(s, x, 6.4, 5.95, 0.35, cap, size=12, color=ACCENT, bold=True)
+text(s, 0.6, 6.8, 12.1, 0.4, "4 pages: Home · How it works · Matcher · Results  |  JDX-103: true partner ranked #1, "
+                              "vs #28 with image-only  |  python app.py · github.com/vansh070605/SherdMatch",
+     size=12, color=MUTED)
 
 # 16 inference
 s = new_slide("Summarise the inference: practical triage tool, hypothesis partly supported, geometry limited by edge "
