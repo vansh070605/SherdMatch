@@ -76,9 +76,12 @@ P, Bm = METHODS[PROP], METHODS[BASE]
 d10 = R["bootstrap"]["proposed_vs_dinov2"]["hit@10"]
 pairs_all = 17635 * 17634 // 2
 idx = {n: i for i, n in enumerate(NAMES)}
-HERO_SHERDS = [("JDX-100", "left:2%;top:4%;width:42%;--r:-6deg"), ("JDX-103", "left:52%;top:0%;width:34%;--r:8deg"),
-               ("JDX-33", "left:6%;top:52%;width:36%;--r:4deg"), ("JDX-107", "left:46%;top:42%;width:40%;--r:-3deg"),
-               ("JDX-118", "left:36%;top:28%;width:20%;--r:12deg")]
+# --r final rotation, --dx/--dy/--r0 scattered start of the fly-in, --d delay, --z parallax depth
+HERO_SHERDS = [("JDX-100", "left:2%;top:4%;width:42%;--r:-6deg;--dx:-120px;--dy:-60px;--r0:-40deg;--d:.15s;--z:14"),
+               ("JDX-103", "left:52%;top:0%;width:34%;--r:8deg;--dx:140px;--dy:-90px;--r0:50deg;--d:.3s;--z:22"),
+               ("JDX-33", "left:6%;top:52%;width:36%;--r:4deg;--dx:-150px;--dy:110px;--r0:-30deg;--d:.45s;--z:10"),
+               ("JDX-107", "left:46%;top:42%;width:40%;--r:-3deg;--dx:160px;--dy:120px;--r0:35deg;--d:.6s;--z:18"),
+               ("JDX-118", "left:36%;top:28%;width:20%;--r:12deg;--dx:0px;--dy:-160px;--r0:90deg;--d:.8s;--z:30")]
 hero_imgs = "".join(f'<img class="sm-float" style="{st}" src="{cut_uri(idx[n], 520)}" alt="pottery sherd {n}">'
                     for n, st in HERO_SHERDS)
 
@@ -101,11 +104,11 @@ HOME = f"""
   <p class="sm-kicker">The problem</p>
   <h2>Thousands of fragments, one lost object</h2>
   <div class="sm-grid3">
-    <div class="sm-card"><div class="sm-big">17,635</div><p>sherds catalogued from a single refuse pit at the
+    <div class="sm-card"><div class="sm-big sm-count">17,635</div><p>sherds catalogued from a single refuse pit at the
       Daxinzhuang site (Jinan, China).</p></div>
-    <div class="sm-card"><div class="sm-big">{pairs_all / 1e6:.0f} M</div><p>possible pairs to compare by hand.
+    <div class="sm-card"><div class="sm-big sm-count">{pairs_all / 1e6:.0f} M</div><p>possible pairs to compare by hand.
       The work grows with the <em>square</em> of the collection size.</p></div>
-    <div class="sm-card"><div class="sm-big">1.5%</div><p>of sherd pairs actually join, even in a curated set.
+    <div class="sm-card"><div class="sm-big sm-count">1.5%</div><p>of sherd pairs actually join, even in a curated set.
       Almost every comparison is a dead end.</p></div>
   </div>
   <div class="sm-grid2">
@@ -136,9 +139,9 @@ HOME = f"""
   <p class="sm-kicker">What it achieves</p>
   <h2>Evaluated on {DS['gold_refit_pairs']} expert-confirmed joins</h2>
   <div class="sm-grid3">
-    <div class="sm-card accent"><div class="sm-big">{pct(P['hit@10'])}</div><p>of sherds have a true partner among
+    <div class="sm-card accent"><div class="sm-big sm-count">{pct(P['hit@10'])}</div><p>of sherds have a true partner among
       the top 10 suggestions (image-only: {pct(Bm['hit@10'])}).</p></div>
-    <div class="sm-card"><div class="sm-big">+{100 * d10[0]:.1f}</div><p>points over the image-only plan at top 10,
+    <div class="sm-card"><div class="sm-big sm-count">+{100 * d10[0]:.1f}</div><p>points over the image-only plan at top 10,
       95% CI {100 * d10[1]:+.1f} to {100 * d10[2]:+.1f}.</p></div>
     <div class="sm-card"><div class="sm-big">{pct(R['sim']['pose_success_rate_50px'])} vs
       {pct(R['gold_pose']['pose_success_rate_50px'])}</div><p>edge-fit success on clean synthetic breaks vs real eroded
@@ -338,9 +341,12 @@ body, .gradio-container { background: var(--bg) !important; }
 .sm-btn.ghost { background: transparent; color: var(--text) !important; border: 1px solid var(--line); }
 .sm-btn:hover { filter: brightness(1.08); }
 .sm-hero-art { position: relative; height: 460px; }
-.sm-float { position: absolute; transform: rotate(var(--r)); filter: drop-shadow(0 18px 24px rgba(0,0,0,.55));
-        transition: transform .4s ease; }
-.sm-float:hover { transform: rotate(0deg) scale(1.04); }
+.sm-float { position: absolute; rotate: var(--r); filter: drop-shadow(0 18px 24px rgba(0,0,0,.55));
+        translate: calc(var(--mx, 0) * var(--z) * 1px) calc(var(--my, 0) * var(--z) * 1px);
+        transition: rotate .5s var(--ease), scale .5s var(--ease), translate .25s ease-out;
+        animation: sm-fly 1.4s var(--ease) var(--d) backwards, sm-bob 7s ease-in-out calc(var(--d) + 1.4s) infinite; }
+.sm-float:nth-child(2n) { animation-duration: 1.4s, 8.5s; }
+.sm-float:hover { rotate: 0deg; scale: 1.06; z-index: 3; }
 .sm-section { padding: 36px 8px 8px; }
 .sm-section.first { padding-top: 24px; }
 .sm-section h2 { font-size: 34px; margin-bottom: 20px; }
@@ -403,14 +409,90 @@ body, .gradio-container { background: var(--bg) !important; }
 #sm-picker .thumbnail-item { background: var(--panel2) !important; border-color: var(--line) !important; }
 #sm-picker .thumbnail-item.selected { border-color: var(--accent) !important; box-shadow: 0 0 0 2px var(--accent); }
 #sm-fit { background: var(--panel) !important; border-radius: 16px; }
+
+/* ---------------- motion ---------------- */
+:root { --ease: cubic-bezier(.2, .8, .2, 1); }
+@keyframes sm-fly { from { opacity: 0; translate: var(--dx) var(--dy); rotate: var(--r0); scale: .7; } }
+@keyframes sm-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes sm-up { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes sm-shine { to { background-position: 200% center; } }
+@keyframes sm-glow { 0%, 100% { transform: translate(-10%, -6%) scale(1); opacity: .55; }
+                     50% { transform: translate(8%, 6%) scale(1.15); opacity: .85; } }
+@keyframes sm-deal { from { opacity: 0; transform: translateY(26px) rotate(-3deg) scale(.94); } }
+@keyframes sm-grow { from { transform: scaleX(0); } }
+@keyframes sm-pop { from { opacity: 0; transform: scale(.92); filter: blur(4px); } }
+@keyframes sm-pulse { 0% { box-shadow: 0 0 0 0 rgba(143,192,153,.55); } 100% { box-shadow: 0 0 0 14px rgba(143,192,153,0); } }
+
+.sm-hero { position: relative; isolation: isolate; }
+.sm-hero::before { content: ""; position: absolute; inset: -10% -5% auto 35%; height: 520px; z-index: -1;
+        background: radial-gradient(closest-side, rgba(212,112,60,.28), transparent 70%);
+        animation: sm-glow 14s ease-in-out infinite; pointer-events: none; }
+.sm-hero-text > * { animation: sm-up .9s var(--ease) both; }
+.sm-hero-text > :nth-child(2) { animation-delay: .1s; }
+.sm-hero-text > :nth-child(3) { animation-delay: .25s; }
+.sm-hero-text > :nth-child(4) { animation-delay: .4s; }
+.sm-hero-text > :nth-child(5) { animation-delay: .55s; }
+.sm-hero h1 span { background-image: linear-gradient(90deg, #d4703c 0%, #f2b483 25%, #d4703c 50%,
+        #f2b483 75%, #d4703c 100%) !important; background-size: 200% auto !important; -webkit-background-clip: text;
+        background-clip: text; color: transparent !important; animation: sm-shine 6s linear infinite; }
+
+.sm-btn { position: relative; overflow: hidden; transition: transform .25s var(--ease), box-shadow .25s; }
+.sm-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(212,112,60,.35); }
+.sm-btn::after { content: ""; position: absolute; inset: 0; transform: translateX(-120%);
+        background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%);
+        transition: transform .7s var(--ease); }
+.sm-btn:hover::after { transform: translateX(120%); }
+
+.sm-card, .sm-note, .sm-steps li { transition: transform .35s var(--ease), border-color .35s, box-shadow .35s,
+        opacity .8s var(--ease); }
+.sm-card:hover, .sm-note:hover, .sm-steps li:hover { transform: translateY(-4px); border-color: #6a4a35;
+        box-shadow: 0 14px 30px rgba(0,0,0,.35); }
+.sm-fig { transition: transform .5s var(--ease), box-shadow .5s, opacity .8s var(--ease); }
+.sm-fig:hover { transform: scale(1.01); box-shadow: 0 18px 40px rgba(0,0,0,.45); }
+.sm-table tbody tr td { transition: background .2s; }
+.sm-table tbody tr:hover td { background: rgba(212,112,60,.08) !important; }
+
+/* scroll reveal: JS adds .sm-r to blocks below the fold, then .sm-in when they scroll into view */
+.sm-r { opacity: 0; transform: translateY(28px); transition: opacity .8s var(--ease), transform .8s var(--ease) !important;
+        transition-delay: var(--sd, 0s) !important; }
+.sm-r.sm-in { opacity: 1; transform: none; }
+
+/* matcher: results replay these each time they are re-rendered */
+.sm-query { animation: sm-up .6s var(--ease) both; }
+.sm-query img { animation: sm-pop .7s var(--ease) both; }
+.sm-cand { animation: sm-deal .6s var(--ease) both; transition: transform .3s var(--ease), border-color .3s; }
+.sm-cand:nth-child(2) { animation-delay: .08s; } .sm-cand:nth-child(3) { animation-delay: .16s; }
+.sm-cand:nth-child(4) { animation-delay: .24s; } .sm-cand:nth-child(5) { animation-delay: .32s; }
+.sm-cand:hover { transform: translateY(-6px); }
+.sm-cand img { transition: transform .5s var(--ease); }
+.sm-cand:hover img { transform: rotate(-4deg) scale(1.08); }
+.sm-cand.hit { animation-name: sm-deal, sm-pulse; animation-duration: .6s, 1.4s;
+        animation-timing-function: var(--ease), ease-out; animation-iteration-count: 1, 2; animation-fill-mode: both, none; }
+.sm-cand.hit:nth-child(1) { animation-delay: 0s, .9s; } .sm-cand.hit:nth-child(2) { animation-delay: .08s, .9s; }
+.sm-cand.hit:nth-child(3) { animation-delay: .16s, .9s; } .sm-cand.hit:nth-child(4) { animation-delay: .24s, .9s; }
+.sm-cand.hit:nth-child(5) { animation-delay: .32s, .9s; }
+.sm-bar i { transform-origin: left; animation: sm-grow 1s var(--ease) .35s both; }
+.sm-table.small tbody tr { animation: sm-up .5s var(--ease) both; }
+.sm-table.small tbody tr:nth-child(2) { animation-delay: .06s; } .sm-table.small tbody tr:nth-child(3) { animation-delay: .12s; }
+.sm-table.small tbody tr:nth-child(4) { animation-delay: .18s; } .sm-table.small tbody tr:nth-child(5) { animation-delay: .24s; }
+#sm-fit img.sm-popin { animation: sm-pop .7s var(--ease) both; }
+#sm-picker .thumbnail-item { transition: transform .25s var(--ease), border-color .25s !important; }
+#sm-picker .thumbnail-item:hover { transform: translateY(-3px) scale(1.03); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .sm-r { opacity: 1; transform: none; }
+}
+
 @media (max-width: 860px) {
   .sm-hero, .sm-grid3, .sm-grid2, .sm-grid2.wide, .sm-steps, .sm-cands { grid-template-columns: 1fr; }
   .sm-hero-art { height: 320px; }
 }
 """
+MOTION_JS = (Path(__file__).resolve().parent / "assets" / "motion.js").read_text(encoding="utf-8")
 HEAD = ('<link rel="preconnect" href="https://fonts.googleapis.com">'
         '<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&'
-        'family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">')
+        'family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">' + MOTION_JS)
 
 
 def theme():
