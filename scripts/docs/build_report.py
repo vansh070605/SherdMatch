@@ -933,7 +933,7 @@ def fill(doc):
     ])
     w.fig("results_qualitative_retrieval.png", "Top-5 candidates from the image-only baseline and the proposed model "
           "for three queries (green = expert-confirmed partner). In the first two the proposed model finds partners the "
-          "baseline misses; the third is a failure case for both.")
+          "baseline misses; the third is a failure case for both.", width=4.9)
     w.h("12.7 Complete results of all configurations")
     full = []
     for mm in R["methods"]:
@@ -1149,7 +1149,9 @@ def main():
     strip_template_instructions(doc)
     tighten_ending(doc)
     for p in doc.paragraphs:  # major parts start on a new page
-        if p.style.name == "Heading 2" and p.text.split(".")[0] in {"2", "4", "9", "12"}:
+        if p.style.name == "Heading 2" and p.text.split(".")[0] in {"2", "4", "8", "9", "12", "16"}:
+            p.paragraph_format.page_break_before = True
+        if p.style.name == "Heading 1" and p.text.startswith(("Review 1", "Performance-Level")):
             p.paragraph_format.page_break_before = True
     DEST.parent.mkdir(exist_ok=True)
     doc.save(str(DEST))
