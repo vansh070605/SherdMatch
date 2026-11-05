@@ -1107,21 +1107,8 @@ def fill(doc):
         para.paragraph_format.left_indent = Inches(0.35)
         para.paragraph_format.first_line_indent = Inches(-0.35)
 
-    # ---------------- Review sections
-    paras = doc.paragraphs
-    fc = [p for p in paras if p.text.startswith("Faculty comments")]
-    sr = [p for p in paras if p.text.startswith("Student's response")]
-    replace_blank_lines(fc[0], "No faculty comments were recorded at Review 1.")
-    replace_blank_lines(sr[0], "Proceeded with the plan presented at Review 1 (dataset → preprocessing → image-only "
-                               "baseline → geometry-based matching). Review 2 implements and evaluates it; see "
-                               "Sections 9–14.")
-    # Review 2 comments are left blank for the faculty to fill in.
-
-    # ---------------- checklist: all items addressed
-    for p_ in paras:
-        if p_.text.startswith("☐"):
-            for r in p_.runs:
-                r.text = r.text.replace("☐", "☑")
+    # The Review 1 / Review 2 sections (rubric tables, faculty comments, student response) and the
+    # submission checklist are the faculty's: they stay exactly as in the template.
 
 
 def strip_template_instructions(doc):
