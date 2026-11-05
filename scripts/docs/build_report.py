@@ -241,6 +241,7 @@ def fill(doc):
         "Register Number(s)": "RA2311026010120",
         "Project Title": "SherdMatch: AI-Based Archaeological Pottery Fragment Matching",
         "Faculty Guide / Reviewer": "Dr Nithyashri J",
+        "Review Date(s)": "Review 1: 29 October 2026     Review 2: 5 November 2026",
     }
     for row in doc.tables[0].rows:
         k = row.cells[0].text.strip()
