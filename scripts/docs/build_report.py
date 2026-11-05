@@ -252,27 +252,21 @@ def fill(doc):
     w = Writer(doc, response_anchor(doc, "1. Abstract"))
     p, b, a = M[PROP], M[BASE], M[APPLR]
     w.p(
-        "Archaeological pottery is usually excavated as hundreds of broken sherds, and finding which sherds "
-        "physically join is slow expert work. This case study presents **SherdMatch**, which treats joining as a "
-        "pattern-recognition problem: given "
-        "one sherd, rank every other sherd in the collection by the probability that the two pieces fit together. We use the "
-        f"Daxinzhuang-18K benchmark (Ji et al., 2026). Its gold standard of {DS['gold_sherds_exterior']} expert-photographed "
-        f"sherds with {DS['gold_refit_pairs']} verified joins (from {DS['gold_vessel_groups']} vessel groups) is the test set. "
-        "We also use 2,212 simulated fracture pairs and the excavation metadata. Each sherd is segmented, "
-        "illumination-normalised and described by colour, LBP texture, ResNet-50 and DINOv2 embeddings. Each pair "
-        "of sherds is also checked for fracture-edge fit: complementary curvature windows are aligned rigidly (Kabsch "
-        "with ICP refinement) and scored by edge contact, area overlap and surface-stripe orientation. A "
-        "class-balanced logistic regression fuses the twelve pair features into a join probability. Under leak-free "
-        f"5-fold vessel-grouped cross-validation, the proposed model retrieves a true partner in the top 5 for "
-        f"{pct(p['hit@5'])} of queries and in the top 10 for {pct(p['hit@10'])}. The image-only DINOv2 baseline from "
-        f"Review 1 reaches {pct(b['hit@5'])} and {pct(b['hit@10'])}, a significant improvement of "
-        f"{ci('proposed_vs_dinov2', 'hit@10')} at top 10. However, most of the gain comes from learning to combine "
-        "appearance cues. Adding geometry changes Hit@5 by only "
-        f"{ci('proposed_vs_appearanceLR', 'hit@5')}, and it lowers Hit@1. The same edge matcher recovers the correct "
-        f"pose for {pct(R['sim']['pose_success_rate_50px'])} of clean synthetic breaks but only "
-        f"{pct(R['gold_pose']['pose_success_rate_50px'])} of real ones. We conclude that a learned appearance ranker is "
-        "a practical triage tool. Fracture geometry needs edge-wear-robust descriptors before it can reliably help "
-        "on eroded real sherds.")
+        "Archaeological pottery is excavated as hundreds of broken sherds, and finding which pieces physically join "
+        "is slow expert work. This case study presents **SherdMatch**, which treats joining as a pattern-recognition "
+        "problem: given one sherd, rank the others in a collection by the probability that the two fit together. "
+        f"We use the Daxinzhuang-18K benchmark (Ji et al., 2026): {DS['gold_sherds_exterior']} sherds with "
+        f"{DS['gold_refit_pairs']} expert-confirmed joins form the test set, supported by simulated fractures and "
+        "excavation metadata. Each sherd is segmented, normalised and described by colour, LBP texture and "
+        "ResNet-50/DINOv2 embeddings. Each pair is also checked for fracture-edge fit by aligning complementary "
+        "curvature segments (Kabsch + ICP). A class-balanced logistic regression fuses twelve pair features into a "
+        "join probability. Under leak-free vessel-grouped cross-validation, the model places a true partner in the "
+        f"top 10 for {pct(p['hit@10'])} of queries, against {pct(b['hit@10'])} for the image-only baseline of "
+        f"Review 1 ({ci('proposed_vs_dinov2', 'hit@10')}). Most of that gain comes from combining appearance cues: "
+        f"adding edge geometry changes Hit@5 by {ci('proposed_vs_appearanceLR', 'hit@5')}, which is not significant. "
+        f"The edge matcher aligns {pct(R['sim']['pose_success_rate_50px'])} of clean synthetic breaks but only "
+        f"{pct(R['gold_pose']['pose_success_rate_50px'])} of real, eroded ones. A learned appearance ranker is "
+        "therefore a practical triage tool, whereas fracture geometry needs erosion-robust descriptors.")
     w.p("**Keywords:** pottery sherd matching, fragment reassembly, image retrieval, contour matching, "
         "logistic regression, cultural heritage.")
 
@@ -1130,10 +1124,25 @@ def fill(doc):
                 r.text = r.text.replace("☐", "☑")
 
 
+def strip_template_instructions(doc):
+    """Remove the template's grey guidance text and its 'Response:' label under every section,
+    plus the intro line telling students how to write the report. Our content stays."""
+    for p in list(doc.paragraphs):
+        t = p.text.strip()
+        if t.startswith("Response:"):
+            prev = p._p.getprevious()
+            if prev is not None and prev.tag == qn("w:p"):
+                prev.getparent().remove(prev)  # the instruction paragraph directly above
+            p._p.getparent().remove(p._p)
+        elif t.startswith("Provide concise, evidence-based explanations"):
+            p._p.getparent().remove(p._p)
+
+
 def main():
     doc = docx.Document(str(TEMPLATE))
     fill(doc)
     resolve_labels(doc)
+    strip_template_instructions(doc)
     for p in doc.paragraphs:  # major parts start on a new page
         if p.style.name == "Heading 2" and p.text.split(".")[0] in {"2", "4", "9", "12"}:
             p.paragraph_format.page_break_before = True
