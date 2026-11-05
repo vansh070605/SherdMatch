@@ -1138,11 +1138,29 @@ def strip_template_instructions(doc):
             p._p.getparent().remove(p._p)
 
 
+def tighten_ending(doc):
+    """Keep the closing footnote on the same page as the checklist (no page with one stray line)."""
+    paras = doc.paragraphs
+    start = next(i for i, p in enumerate(paras) if p.text.strip() == "Submission Checklist")
+    for p in paras[start + 1:]:
+        pf = p.paragraph_format
+        pf.space_before = Pt(0)
+        pf.space_after = Pt(2)
+        pf.line_spacing = 1.0
+    body = doc.element.body
+    note = next(p for p in paras if p.text.startswith("Faculty evaluation should assess"))
+    prev = note._p.getprevious()
+    while prev is not None and prev.tag == qn("w:p") and not "".join(prev.itertext()).strip():
+        gone, prev = prev, prev.getprevious()  # blank paragraphs before the note
+        body.remove(gone)
+
+
 def main():
     doc = docx.Document(str(TEMPLATE))
     fill(doc)
     resolve_labels(doc)
     strip_template_instructions(doc)
+    tighten_ending(doc)
     for p in doc.paragraphs:  # major parts start on a new page
         if p.style.name == "Heading 2" and p.text.split(".")[0] in {"2", "4", "9", "12"}:
             p.paragraph_format.page_break_before = True
